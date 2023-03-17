@@ -9,9 +9,9 @@ import random
 from email_split import email_split
 # for the api
 import json
-
+from io import StringIO
+import sys
 import logging
-logging.basicConfig(filename='smtp_debug.log', level=logging.DEBUG)
 #############################################
 # FLASK STUFF
 #############################################
@@ -62,7 +62,11 @@ def check1():
   # SMTP lib setup (use debug level for full output)
   server = smtplib.SMTP()
   server.set_debuglevel(1)
-  smtp_conn.set_debuglevel(logging.DEBUG)
+  # Save the original stderr
+  original_stderr = sys.stderr
+
+  # Redirect stderr to a StringIO buffer
+  sys.stderr = debug_output = StringIO()
   # SMTP Conversation
   try:
     server.connect(mxRecord)
@@ -74,21 +78,19 @@ def check1():
     print('heated up')
     time.sleep(10)
     code = 666
-
-  # Assume 250 as Success
+  # Reset stderr to the original value
+  sys.stderr = original_stderr
+    # Assume 250 as Success
   if code == 250:
     print(code)
     rzlt = {"email": email, "status": "valid", "reason": "accepted_email"}
     return jsonify(rzlt)
   elif code == 666:
-    with open('smtp_debug.log', 'r') as file:
-      error_kind = file.read()
     print('smtp error; status: unknown')
-    rzlt = {"email": email, "status": "invalid", "reason": "smtp_error","debug":error_kind}
+    rzlt = {"email": email, "status": "invalid", "reason": "smtp_error","debug":debug_output.getvalue()}
     return jsonify(rzlt)
   else:
-    with open('smtp_debug.log', 'r') as file:
-      error_kind = file.read()
     print(code)
-    rzlt = {"email": email, "status": "invalid", "reason": "invalid_email","debug":error_kind}
+    rzlt = {"email": email, "status": "invalid", "reason": "invalid_email","debug":debug_output.getvalue()}
     return jsonify(rzlt)
+  debug_output.close()
