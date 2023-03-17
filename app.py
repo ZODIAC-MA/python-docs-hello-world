@@ -70,6 +70,7 @@ def check1():
   # SMTP Conversation
   try:
     server.connect(mxRecord)
+    server.ehlo(host)  # Add this line to send the EHLO command
     server.mail('mail@sendgrid.com')
     code, message = server.rcpt(str(addressToVerify))
     server.quit()
