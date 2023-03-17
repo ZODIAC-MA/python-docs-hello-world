@@ -1,1 +1,5 @@
 Flask>=2.0,<=2.1.1
+Pysocks
+dnspython
+secure-smtplib
+email_split
