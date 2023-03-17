@@ -69,7 +69,7 @@ def check1():
   try:
     server.connect(mxRecord)
     server.ehlo(host)  # Add this line to send the EHLO command
-    server.mail(f'mail@validateforlife.com')
+    server.mail(f'johndoe@www.validateforlife.com')
     code, message = server.rcpt(str(addressToVerify))
     server.quit()
   except smtplib.SMTPServerDisconnected:
