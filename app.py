@@ -71,7 +71,7 @@ def check1():
   try:
     server.connect(mxRecord)
     server.ehlo(host)  # Add this line to send the EHLO command
-    server.mail('mail@sendgrid.com')
+    server.mail(f'mail@host')
     code, message = server.rcpt(str(addressToVerify))
     server.quit()
   except smtplib.SMTPServerDisconnected:
