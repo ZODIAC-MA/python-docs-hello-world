@@ -81,7 +81,7 @@ def check1():
     # Assume 250 as Success
   if code == 250:
     print(code)
-    rzlt = {"email": email, "status": "valid", "reason": "accepted_email"}
+    rzlt = {"email": email, "status": "valid", "reason": "accepted_email","debug":debug_output.getvalue()}
     return jsonify(rzlt)
   elif code == 666:
     print('smtp error; status: unknown')
