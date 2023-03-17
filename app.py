@@ -56,8 +56,6 @@ def check1():
 
   # Get local server hostname
   host = socket.gethostname()
-  host = host.replace('776', f'{random.randint(100,999)}')
-  print(host)
 
   # SMTP lib setup (use debug level for full output)
   server = smtplib.SMTP()
