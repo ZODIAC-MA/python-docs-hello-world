@@ -70,7 +70,6 @@ def check1():
   # SMTP Conversation
   try:
     server.connect(mxRecord)
-    server.helo("mx4.abv.bg")
     server.mail('mail@sendgrid.com')
     code, message = server.rcpt(str(addressToVerify))
     server.quit()
