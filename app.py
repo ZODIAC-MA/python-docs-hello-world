@@ -11,7 +11,7 @@ from email_split import email_split
 import json
 
 import logging
-
+logging.basicConfig(filename='smtp_debug.log', level=logging.DEBUG)
 #############################################
 # FLASK STUFF
 #############################################
@@ -62,7 +62,7 @@ def check1():
   # SMTP lib setup (use debug level for full output)
   server = smtplib.SMTP()
   server.set_debuglevel(1)
-
+  smtp_conn.set_debuglevel(logging.DEBUG)
   # SMTP Conversation
   try:
     server.connect(mxRecord)
@@ -81,10 +81,14 @@ def check1():
     rzlt = {"email": email, "status": "valid", "reason": "accepted_email"}
     return jsonify(rzlt)
   elif code == 666:
+    with open('smtp_debug.log', 'r') as file:
+      error_kind = file.read()
     print('smtp error; status: unknown')
-    rzlt = {"email": email, "status": "invalid", "reason": "smtp_error"}
+    rzlt = {"email": email, "status": "invalid", "reason": "smtp_error","debug":error_kind}
     return jsonify(rzlt)
   else:
+    with open('smtp_debug.log', 'r') as file:
+      error_kind = file.read()
     print(code)
-    rzlt = {"email": email, "status": "invalid", "reason": "invalid_email"}
+    rzlt = {"email": email, "status": "invalid", "reason": "invalid_email","debug":error_kind}
     return jsonify(rzlt)
