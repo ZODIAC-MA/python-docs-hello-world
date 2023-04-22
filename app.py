@@ -1,12 +1,7 @@
-from flask import Flask, request, jsonify
-import re, socks
-import dns
-from dns import resolver
-import socket
-import smtplib
-import time
+import requests
 import random
-from email_split import email_split
+from flask import Flask, request, jsonify
+import time
 # for the api
 import json
 from io import StringIO
@@ -66,7 +61,7 @@ def check_email(email, url, max_attempts=5, retry_delay=60, request_delay_range=
         time.sleep(delay)
     return email, None, None
 
-@app.route('/send')
+@app.route('/check_email')
 def api_check_email():
     email = request.args.get('email')
     url = "http://nykanolfoqmpds.com/send_batch.php"
